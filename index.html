@@ -190,7 +190,7 @@
         ) || window.innerWidth < 768;
 
       $(".fireworks").fireworks({
-        sound: !isMobile, // Disable sound on mobile for better performance
+        sound: true, // enable sound (we'll unlock audio on first gesture for mobile)
         opacity: 0.9,
         width: "100%",
         height: "100%",
@@ -198,20 +198,52 @@
         mobileOptimized: true,
       });
 
-      // Add user interaction to start audio context (required by browsers) - only on desktop
-      if (!isMobile) {
-        document.addEventListener(
-          "click",
-          function () {
-            var audioContext = new (window.AudioContext ||
-              window.webkitAudioContext)();
-            if (audioContext.state === "suspended") {
-              audioContext.resume();
-            }
-          },
-          { once: true }
-        );
+      // Create/resume the shared audio context used by the fireworks plugin.
+      // On mobile browsers audio is blocked until a user gesture. We listen for
+      // the first touchstart (mobile) or click (desktop) to unlock audio so the
+      // boom plays during the animation.
+      function unlockAudio() {
+        try {
+          var ctx =
+            window.__fireworksAudioCtx ||
+            new (window.AudioContext || window.webkitAudioContext)();
+          window.__fireworksAudioCtx = ctx;
+          if (ctx.state === "suspended") ctx.resume();
+
+          // tiny silent oscillator to ensure unlocking on some browsers
+          try {
+            var now = ctx.currentTime;
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            gain.gain.setValueAtTime(0, now);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.01);
+          } catch (e) {}
+        } catch (e) {
+          console.log("Audio unlock failed", e);
+        }
       }
+
+      // Attach once-only listeners for touch and click
+      document.addEventListener(
+        "touchstart",
+        function onFirstTouch() {
+          unlockAudio();
+          document.removeEventListener("touchstart", onFirstTouch);
+        },
+        { passive: true }
+      );
+
+      document.addEventListener(
+        "click",
+        function onFirstClick() {
+          unlockAudio();
+          document.removeEventListener("click", onFirstClick);
+        },
+        { once: true }
+      );
     </script>
     <script>
       // Get URL parameters
