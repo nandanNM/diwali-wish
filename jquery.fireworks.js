@@ -29,21 +29,77 @@
     var animationStopped = false;
     var startTime = 0;
 
-    // Sound data - better firework sounds
-    var sounds = [
-      {
-        prefix: "data:audio/wav;base64,",
-        data: "UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+Dyvm0hBjuE0vPTgjMGHm7A7+OZURE=",
-      },
-      {
-        prefix: "data:audio/wav;base64,",
-        data: "UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+Dyvm0hBjuE0vPTgjMGHm7A7+OZURE=",
-      },
-      {
-        prefix: "data:audio/wav;base64,",
-        data: "UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+Dyvm0hBjuE0vPTgjMGHm7A7+OZURE=",
-      },
-    ];
+    // Optional legacy audio element (not used for the synthesized boom)
+    // We will use the Web Audio API to synthesize a deeper 'boom' explosion sound
+    // for a punchier effect without external assets.
+
+    /**
+     * Play a synthesized explosion/boom sound using Web Audio API.
+     * volume: 0..1
+     */
+    function playBoom(volume) {
+      try {
+        var ctx = window.__fireworksAudioCtx;
+        if (!ctx) {
+          ctx = window.__fireworksAudioCtx = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        }
+        var now = ctx.currentTime;
+
+        // Create a short low-frequency oscillator for the 'thump'
+        var osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(120, now);
+
+        var oscGain = ctx.createGain();
+        oscGain.gain.setValueAtTime(
+          Math.max(0.0001, (volume || 0.6) * 0.8),
+          now
+        );
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+        osc.connect(oscGain);
+        oscGain.connect(ctx.destination);
+
+        // Create a burst of filtered noise for the sharp explosion component
+        var bufferSize = ctx.sampleRate * 1.0; // 1 second buffer, will stop earlier
+        var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        var data = buffer.getChannelData(0);
+        for (var i = 0; i < bufferSize; i++) {
+          // white noise shaped by a quick decay
+          data[i] =
+            (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.08));
+        }
+
+        var noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        var noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = "lowpass";
+        noiseFilter.frequency.setValueAtTime(2000, now);
+
+        var noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(
+          Math.max(0.0001, (volume || 0.6) * 0.6),
+          now
+        );
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(ctx.destination);
+
+        // Start everything
+        osc.start(now);
+        osc.stop(now + 0.5);
+
+        noise.start(now);
+        noise.stop(now + 0.6);
+      } catch (e) {
+        // Fallback: no-op if audio isn't available
+        console.log("playBoom error", e);
+      }
+    }
 
     if (options.sound) {
       audio = document.createElement("audio");
@@ -172,19 +228,13 @@
 
     Rocket.prototype.explode = function () {
       if (options.sound) {
-        var randomNumber = (function (min, max) {
-          min = Math.ceil(min);
-          max = Math.floor(max);
-          return Math.floor(Math.random() * (max - min + 1)) + min;
-        })(0, 2);
+        // Play a synthesized boom for a deeper, punchier explosion
         try {
-          audio.src = sounds[randomNumber].prefix + sounds[randomNumber].data;
-          audio.volume = 0.3; // Lower volume for better UX
-          audio.play().catch(function (e) {
-            console.log("Audio play failed:", e);
-          });
+          // volume slightly randomized for variety
+          var vol = 0.5 + Math.random() * 0.3;
+          playBoom(vol);
         } catch (e) {
-          console.log("Audio error:", e);
+          console.log("Boom audio error:", e);
         }
       }
 
