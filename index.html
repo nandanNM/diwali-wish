@@ -269,7 +269,7 @@
         // We have only sender param (common when sharing). Treat the receiver as 'You'
         receiverName.innerText = "You";
         senderName.innerText = senderParam;
-        nameInputModal.style.display = "none"; // don't ask for input when link already contains sender
+        nameInputModal.style.display = "flex"; // don't ask for input when link already contains sender
       } else {
         // No parameters, show name input form
         nameInputModal.style.display = "flex";
