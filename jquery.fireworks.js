@@ -5,7 +5,8 @@
       opacity: 0.9,
       width: "100%",
       height: "100%",
-      duration: 10000, // 10 seconds duration
+      duration: 20000, // 20 seconds duration'
+      loop: true,
       mobileOptimized: true,
     };
 
