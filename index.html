@@ -269,18 +269,29 @@
         const shareUrl = new URL(
           window.location.origin + window.location.pathname
         );
-        shareUrl.searchParams.set("sender", currentReceiver);
+        // set both receiver and sender params correctly
+        shareUrl.searchParams.set("sender", currentSender);
 
         // Personalized message that prompts the friend to click and reveal the wish
-        const shareText = `Hi ${currentReceiver}! ${currentSender} sent you a Diwali wish. Click to reveal the wish and celebrate together! 🪔✨\n`;
+        const shareText = `Hi there!  ${
+          currentSender
+            .trim()
+            .split(/\s+/)[0]
+            .toLowerCase()
+            .charAt(0)
+            .toUpperCase() + currentSender.slice(1)
+        } just sent you a special Diwali surprise 🎁
+Tap the link to reveal your wish and spread the light! 🪔✨\n`;
+
+        // Combine message + link into a single text so apps won't drop the message
+        const combinedText = shareText + shareUrl.toString();
 
         // Try to use Web Share API if available
         if (navigator.share) {
           navigator
             .share({
               title: "Happy Diwali Wishes! 🪔",
-              text: shareText + shareUrl.toString(),
-              url: shareUrl.toString(),
+              text: combinedText,
             })
             .then(() => {
               showShareMessage("Shared successfully! 🎉");
