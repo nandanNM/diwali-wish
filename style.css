@@ -1,11 +1,131 @@
 body {
   margin: 0;
   font-family: "Salsa", cursive;
+  scroll-behavior: smooth;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Smooth scrolling for all elements */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(249, 149, 1, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(249, 149, 1, 0.6);
+  }
+}
+
+/* Animation classes */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.8s ease-out;
+}
+
+.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) translateX(0) scale(1) !important;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow-animation {
+  animation: glow 2s ease-in-out infinite;
 }
 
 .jhalar {
   width: 220px;
   margin-bottom: -180px;
+  transition: all 0.3s ease;
+}
+
+.jhalar:hover {
+  transform: scale(1.05);
 }
 
 .hero-section {
@@ -14,15 +134,49 @@ body {
   background-image: url(images/orange-backdrop.png);
   background-size: cover;
   background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(249, 149, 1, 0.1),
+    rgba(255, 184, 77, 0.1)
+  );
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .pragraph-and-audio {
   margin-left: 15rem;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-section p {
   font-size: 46px;
   max-width: 550px;
+  transition: all 0.3s ease;
+}
+
+.hero-section p:hover {
+  transform: translateX(10px);
 }
 
 audio::-webkit-media-controls-panel {
@@ -37,12 +191,91 @@ audio::-webkit-media-controls-panel {
   align-items: center;
   justify-content: center;
   padding-left: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.audio-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.audio-container:hover::before {
+  left: 100%;
+}
+
+.audio-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(249, 149, 1, 0.3);
+}
+
+/* Deepak animations */
+.deekpak {
+  transition: all 0.3s ease;
+  animation: float 4s ease-in-out infinite;
+}
+
+.deekpak:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+}
+
+.first-deepak {
+  animation-delay: 0s;
+}
+
+.second-deepak {
+  animation-delay: 2s;
 }
 
 .lakshmi-ganesha-section {
   background-color: #f99501;
   padding-block: 1em;
   padding-inline: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.lakshmi-ganesha-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 184, 77, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(249, 149, 1, 0.1) 0%,
+      transparent 50%
+    );
+  animation: backgroundMove 10s ease-in-out infinite;
+}
+
+@keyframes backgroundMove {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-10px) translateY(-10px);
+  }
 }
 
 .lakshmi-ganesha-img {
@@ -50,6 +283,14 @@ audio::-webkit-media-controls-panel {
   width: 100%;
   display: block;
   margin-inline: auto;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.lakshmi-ganesha-img:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
 }
 
 .horizontal-divider {
@@ -59,12 +300,42 @@ audio::-webkit-media-controls-panel {
   max-width: 800px;
   margin-inline: auto;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .horizontal-line {
   height: 2px;
   background-color: #fbd8a4;
   width: 468px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.horizontal-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: lineShimmer 3s ease-in-out infinite;
+}
+
+@keyframes lineShimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .circle {
@@ -73,6 +344,24 @@ audio::-webkit-media-controls-panel {
   background-color: #fbd8a4;
   border-radius: 100%;
   flex-shrink: 0;
+  transition: all 0.3s ease;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.circle:hover {
+  transform: scale(1.5);
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 .lakshmi-ganesha-section h2 {
@@ -94,6 +383,34 @@ audio::-webkit-media-controls-panel {
   background-color: white;
   padding: 4rem;
   border-radius: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.white-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(249, 149, 1, 0.05),
+    rgba(255, 184, 77, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.white-card:hover::before {
+  opacity: 1;
+}
+
+.white-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
 .white-card p {
@@ -103,6 +420,12 @@ audio::-webkit-media-controls-panel {
 .little-girl {
   max-width: 260px;
   margin-left: -5rem;
+  transition: all 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+.little-girl:hover {
+  transform: scale(1.05) rotate(2deg);
 }
 
 .lakshmi-ganesha-card {
@@ -112,10 +435,46 @@ audio::-webkit-media-controls-panel {
   max-width: 772px;
   display: flex;
   margin-inline: auto;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.lakshmi-ganesha-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 149, 1, 0.05),
+    rgba(255, 184, 77, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lakshmi-ganesha-card:hover::before {
+  opacity: 1;
+}
+
+.lakshmi-ganesha-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
 .lakshmi-ganesha-card img {
   width: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.lakshmi-ganesha-card img:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
 }
 
 .thank-you-text {
@@ -206,6 +565,37 @@ audio::-webkit-media-controls-panel {
   overflow: hidden;
 }
 
+/* Parallax Effect */
+.hero-section {
+  background-attachment: fixed;
+}
+
+.lakshmi-ganesha-section {
+  background-attachment: fixed;
+}
+
+/* Tablet responsive styles */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .diya-hero-top {
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .diya-center-main {
+    margin: 25px auto;
+    width: 100px;
+    height: 100px;
+  }
+
+  .diya-share-bottom {
+    margin: 15px auto 0;
+    width: 70px;
+    height: 70px;
+  }
+}
+
 /* Mobile optimization for fireworks */
 @media (max-width: 768px) {
   .fireworks {
@@ -220,6 +610,67 @@ audio::-webkit-media-controls-panel {
     height: 100vh !important;
     max-width: 100vw !important;
     max-height: 100vh !important;
+  }
+
+  /* Disable parallax on mobile for better performance */
+  .hero-section,
+  .lakshmi-ganesha-section {
+    background-attachment: scroll;
+  }
+
+  /* Mobile diya adjustments */
+  .diya-hero-top {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .diya-center-main {
+    margin: 20px auto;
+    width: 80px;
+    height: 80px;
+  }
+
+  .diya-share-bottom {
+    margin: 10px auto 0;
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Reduce animations on mobile for better performance */
+  .diya-flame {
+    animation-duration: 2s;
+  }
+
+  .diya-glow {
+    animation-duration: 4s;
+  }
+
+  .diya-sparkle {
+    animation-duration: 6s;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .diya-hero-top {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .diya-center-main {
+    margin: 15px auto;
+    width: 60px;
+    height: 60px;
+  }
+
+  .diya-share-bottom {
+    margin: 8px auto 0;
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -380,9 +831,472 @@ audio::-webkit-media-controls-panel {
   }
 }
 
+/* Animated Diya Styles */
+.diya-container {
+  position: relative;
+  display: inline-block;
+  z-index: 10;
+}
+
+/* Hero section diya - top right corner */
+.diya-hero-top {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center main diya */
+.diya-center-main {
+  display: flex;
+  margin: 30px auto;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom share diya */
+.diya-share-bottom {
+  display: block;
+  margin: 20px auto 0;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+}
+
+.diya-shadow {
+  height: 15px;
+  width: 50px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.2) 0%, transparent 70%);
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  animation: shadowFlicker 3s ease-in-out infinite;
+}
+
+@keyframes shadowFlicker {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.diya-body {
+  height: 60px;
+  width: 80px;
+  background: linear-gradient(
+    to top,
+    #fd500a 0%,
+    #f4c631 30%,
+    #fdcf0f 70%,
+    #fff8e1 100%
+  );
+  border-radius: 0 0 40px 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Oil level indicator */
+.diya-body::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  right: 5px;
+  height: 2px;
+  background: linear-gradient(90deg, #fd500a, #e65100);
+  border-radius: 1px;
+}
+
+.diya-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: diyaShimmer 4s ease-in-out infinite;
+}
+
+@keyframes diyaShimmer {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+.diya-wick-container {
+  width: 60px;
+  height: 20px;
+  background: linear-gradient(135deg, #fd500a 0%, #e65100 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.diya-wick {
+  width: 2px;
+  height: 25px;
+  background: linear-gradient(to top, #5d4037 0%, #8d6e63 50%, #a1887f 100%);
+  border-radius: 1px;
+  position: relative;
+  animation: wickFlicker 2s ease-in-out infinite;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes wickFlicker {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+.diya-flame {
+  width: 12px;
+  height: 35px;
+  background: radial-gradient(
+    ellipse at center bottom,
+    #fff 0%,
+    #fff8e1 20%,
+    #f4c631 40%,
+    #fd500a 70%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: flameFlicker 1.5s ease-in-out infinite;
+  filter: blur(0.5px);
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
+}
+
+@keyframes flameFlicker {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1) rotate(-2deg);
+    opacity: 0.9;
+  }
+  25% {
+    transform: translateX(-50%) scale(1.1) rotate(1deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.9) rotate(-1deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateX(-50%) scale(1.05) rotate(2deg);
+    opacity: 0.95;
+  }
+}
+
+.diya-flame::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 25px;
+  background: radial-gradient(
+    ellipse at center bottom,
+    #fff 0%,
+    #fff8e1 30%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: innerFlame 2s ease-in-out infinite;
+}
+
+@keyframes innerFlame {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.diya-glow {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 248, 225, 0.15) 30%,
+    rgba(255, 193, 7, 0.1) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.3);
+    opacity: 0.8;
+  }
+}
+
+.diya-sparkles {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.diya-sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  animation: sparkleFloat 4s ease-in-out infinite;
+}
+
+.diya-sparkle:nth-child(1) {
+  top: 20px;
+  left: 10px;
+  animation-delay: 0s;
+}
+
+.diya-sparkle:nth-child(2) {
+  top: 30px;
+  right: 15px;
+  animation-delay: 1s;
+}
+
+.diya-sparkle:nth-child(3) {
+  bottom: 25px;
+  left: 20px;
+  animation-delay: 2s;
+}
+
+.diya-sparkle:nth-child(4) {
+  bottom: 15px;
+  right: 10px;
+  animation-delay: 3s;
+}
+
+@keyframes sparkleFloat {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+}
+
 /* 
 @media (width < 840px) {
     .second-deepak {
         display: none;
     }
 } */
+
+.large-diya-container {
+  height: 500px;
+  width: 500px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* top: 50%; */
+  margin: 19%;
+  /* -webkit-box-reflect: below 4px linear-gradient(transparent 30%, rgba(0,0,0,0.35)); */
+  padding-bottom: 20%;
+  /* left: 50%; */
+}
+.diwali {
+  color: white;
+  top: 50%;
+  position: absolute;
+  left: 34%;
+  font-family: "Zen Kurenaido", sans-serif;
+  font-weight: lighter;
+  font-size: 30px;
+}
+.diya {
+  height: 150px;
+  width: 300px;
+  background-color: #fdcf0f;
+  border-radius: 0 0 150px 150px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  overflow: hidden;
+}
+.inside {
+  width: 300px;
+  height: 60px;
+  background-color: #fd500a;
+  border-radius: 50%;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 170px;
+}
+.shadow {
+  height: 60px;
+  width: 320px;
+  background-color: rgba(25, 5, 71, 0.5);
+  position: absolute;
+  bottom: 30px;
+  border-radius: 50%;
+  margin: auto;
+  left: 0;
+  right: 0;
+}
+.flame {
+  height: 170px;
+  width: 170px;
+  background-color: #fdf1c2;
+  border-radius: 160px 0;
+  transform: rotate(-45deg);
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 36px;
+  animation: scale-up 2s infinite;
+}
+@keyframes scale-up {
+  50% {
+    transform: rotate(-45deg) scale(1.05);
+    bottom: 42px;
+  }
+}
+.flame:after {
+  content: "";
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  background-color: #f4c631;
+  border-radius: 120px 0;
+  position: absolute;
+  bottom: 0;
+}
+.light {
+  height: 330px;
+  width: 330px;
+  background-color: rgba(253, 241, 194, 0.2);
+  border-radius: 50%;
+  position: absolute;
+  left: -15px;
+  bottom: 0;
+}
+.light:before,
+.light:after {
+  content: "";
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  background-color: rgba(253, 241, 194, 0.3);
+  border-radius: 50%;
+  animation: shine 5s linear infinite;
+}
+@keyframes shine {
+  50% {
+    transform: scale(0.7);
+    opacity: 0.2;
+  }
+}
+.light:before {
+  bottom: 30px;
+  right: 60px;
+}
+.light:after {
+  top: 50px;
+  left: 80px;
+  animation-delay: 1s;
+}
+.line-1,
+.line-2 {
+  position: absolute;
+  height: 60px;
+  width: 320px;
+  border: none;
+  border-bottom: 8px solid #ffffff;
+  border-radius: 50%;
+  left: -10px;
+}
+.line-2 {
+  top: 60px;
+}
+.dots {
+  height: 60px;
+  width: 320px;
+  border: none;
+  border-bottom: 10px dotted #fd500a;
+  position: absolute;
+  border-radius: 50%;
+  top: 30px;
+  left: -10px;
+}
+footer {
+  position: fixed;
+  bottom: 4px;
+  text-align: center;
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  font-size: 30px;
+  font-family: "Zen Kurenaido", sans-serif;
+}
